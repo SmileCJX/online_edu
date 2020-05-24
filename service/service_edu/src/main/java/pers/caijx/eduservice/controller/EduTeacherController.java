@@ -1,6 +1,8 @@
 package pers.caijx.eduservice.controller;
 
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -11,7 +13,9 @@ import pers.caijx.commonutils.R;
 import pers.caijx.eduservice.entity.EduTeacher;
 import pers.caijx.eduservice.service.EduTeacherService;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -58,6 +62,32 @@ public class EduTeacherController {
         } else {
             return R.error();
         }
+    }
+
+    /**
+     * 分页查询讲师的方法
+     * current 当前页
+     * limit 每页记录数
+     * @return
+     */
+    @GetMapping("pageTeacher/{current}/{limit}")
+    public R pageListTeacher(@PathVariable long current,
+                             @PathVariable long limit) {
+        // 创建page分页对象
+        Page<EduTeacher> pageTeacher = new Page<>(current,limit);
+        // 调用方法实现分页
+        // 调用方法时候，底层封装，把分页所有数据封装到pageTeacher对象里面
+        eduTeacherService.page(pageTeacher, null);
+
+        long total = pageTeacher.getSize();
+        List<EduTeacher> records = pageTeacher.getRecords();
+
+//        Map map = new HashMap();
+//        map.put("total",total);
+//        map.put("rows",records);
+//        return R.ok().data(map);
+
+        return R.ok().data("total",total).data("rows",records);
     }
 
 }
