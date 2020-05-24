@@ -1,21 +1,21 @@
 package pers.caijx.eduservice.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import pers.caijx.commonutils.R;
 import pers.caijx.eduservice.entity.EduTeacher;
+import pers.caijx.eduservice.entity.vo.TeacherQuery;
 import pers.caijx.eduservice.service.EduTeacherService;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * <p>
@@ -79,13 +79,52 @@ public class EduTeacherController {
         // 调用方法时候，底层封装，把分页所有数据封装到pageTeacher对象里面
         eduTeacherService.page(pageTeacher, null);
 
-        long total = pageTeacher.getSize();
+        long total = pageTeacher.getTotal();
         List<EduTeacher> records = pageTeacher.getRecords();
 
 //        Map map = new HashMap();
 //        map.put("total",total);
 //        map.put("rows",records);
 //        return R.ok().data(map);
+
+        return R.ok().data("total",total).data("rows",records);
+    }
+
+    /**
+     * 条件查询带分页的方法
+     * @return
+     */
+    @PostMapping("/pageTeacherCondition/{current}/{limit}")
+    public R pageTeacherCondition(@PathVariable long current,
+                                  @PathVariable long limit,
+                                  @RequestBody(required = false) TeacherQuery teacherQuery) {
+        // 创建page对象
+        Page<EduTeacher> teacherPage = new Page<>(current,limit);
+        // 构建对象
+        QueryWrapper<EduTeacher> wrapper = new QueryWrapper<>();
+        // 多条件组合查询
+        String name = teacherQuery.getName();
+        Integer level = teacherQuery.getLevel();
+        String begin = teacherQuery.getBegin();
+        String end = teacherQuery.getEnd();
+        if (StringUtils.isNotBlank(name)) {
+            // 构建对象
+            wrapper.like("name", name);
+        }
+        if (null != level) {
+            wrapper.eq("level", level);
+        }
+        if (StringUtils.isNotBlank(begin)) {
+            wrapper.ge("gmt_create", begin);
+        }
+        if (StringUtils.isNotBlank(end)) {
+            wrapper.le("gmt_create", end);
+        }
+
+        // 调用方法实现条件查询
+        eduTeacherService.page(teacherPage, wrapper);
+        long total = teacherPage.getTotal();
+        List<EduTeacher> records = teacherPage.getRecords();
 
         return R.ok().data("total",total).data("rows",records);
     }
