@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import pers.caijx.commonutils.R;
 import pers.caijx.eduservice.entity.EduTeacher;
 import pers.caijx.eduservice.service.EduTeacherService;
 
@@ -38,10 +39,10 @@ public class EduTeacherController {
      */
     @ApiOperation(value = "所有讲师列表")
     @GetMapping("/findAll")
-    public List<EduTeacher> findAllTeacher() {
+    public R findAllTeacher() {
         // 调用service的方式完成查询所有的操作
         List<EduTeacher> list = eduTeacherService.list(null);
-        return list;
+        return R.ok().data("items",list);
     }
 
     /**
@@ -50,9 +51,13 @@ public class EduTeacherController {
      */
     @ApiOperation(value = "根据ID删除讲师")
     @DeleteMapping({"{id}"})
-    public boolean removeTeacher(@ApiParam(name = "id",value = "讲师ID",required = true)  @PathVariable String id) {
+    public R removeTeacher(@ApiParam(name = "id",value = "讲师ID",required = true)  @PathVariable String id) {
         boolean flag = eduTeacherService.removeById(id);
-        return flag;
+        if (flag) {
+            return R.ok();
+        } else {
+            return R.error();
+        }
     }
 
 }
