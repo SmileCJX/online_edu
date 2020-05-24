@@ -2,10 +2,8 @@ package pers.caijx.eduservice.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RestController;
 import pers.caijx.eduservice.entity.EduTeacher;
 import pers.caijx.eduservice.service.EduTeacherService;
 
@@ -39,6 +37,16 @@ public class EduTeacherController {
         // 调用service的方式完成查询所有的操作
         List<EduTeacher> list = eduTeacherService.list(null);
         return list;
+    }
+
+    /**
+     * 逻辑删除讲师的方法
+     * @return
+     */
+    @DeleteMapping({"id"})
+    public boolean removeTeacher(@PathVariable String id) {
+        boolean flag = eduTeacherService.removeById(id);
+        return flag;
     }
 
 }
