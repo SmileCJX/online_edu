@@ -13,6 +13,7 @@ import pers.caijx.commonutils.R;
 import pers.caijx.eduservice.entity.EduTeacher;
 import pers.caijx.eduservice.entity.vo.TeacherQuery;
 import pers.caijx.eduservice.service.EduTeacherService;
+import pers.caijx.servicebase.exceptionhandler.BusinessException;
 
 import java.util.List;
 
@@ -152,7 +153,12 @@ public class EduTeacherController {
     @GetMapping("/getTeacher/{id}")
     public R getTeacher(@PathVariable String id) {
         EduTeacher eduTeacher = eduTeacherService.getById(id);
-        int i = 1 / 0;
+        try {
+            int i = 1 / 0;
+        } catch (Exception e) {
+            throw  new BusinessException(20001,"执行了自定义异常");
+        }
+
         return R.ok().data("teacher",eduTeacher);
     }
 
