@@ -152,6 +152,7 @@ public class EduTeacherController {
     @GetMapping("/getTeacher/{id}")
     public R getTeacher(@PathVariable String id) {
         EduTeacher eduTeacher = eduTeacherService.getById(id);
+        int i = 1 / 0;
         return R.ok().data("teacher",eduTeacher);
     }
 
