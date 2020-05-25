@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
  * @ClassName EduConfig
@@ -15,6 +16,7 @@ import org.springframework.context.annotation.Configuration;
  * @Version V1.0
  **/
 @Configuration
+@EnableTransactionManagement
 @MapperScan("pers.caijx.eduservice.mapper")
 public class EduConfig {
 
