@@ -156,11 +156,11 @@ public class EduTeacherController {
     @GetMapping("/getTeacher/{id}")
     public R getTeacher(@PathVariable String id) {
         EduTeacher eduTeacher = eduTeacherService.getById(id);
-        try {
-            int i = 1 / 0;
-        } catch (Exception e) {
-            throw  new BusinessException(20001,"执行了自定义异常");
-        }
+//        try {
+//            int i = 1 / 0;
+//        } catch (Exception e) {
+//            throw  new BusinessException(20001,"执行了自定义异常");
+//        }
 
         return R.ok().data("teacher",eduTeacher);
     }
