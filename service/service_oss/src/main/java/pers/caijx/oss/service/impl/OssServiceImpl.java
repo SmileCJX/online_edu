@@ -25,7 +25,7 @@ public class OssServiceImpl implements OssService {
 
         // 工具类获取值
         String endpoint = ConstantPropertiesUtils.END_POINT;
-        String accessKeyId = ConstantPropertiesUtils.ACCESS_KEY_ID
+        String accessKeyId = ConstantPropertiesUtils.ACCESS_KEY_ID;
         String accessKeySecret = ConstantPropertiesUtils.ACCESS_KEY_SECRET;
         String bucketName = ConstantPropertiesUtils.BUCKET_NAME;
 
@@ -37,23 +37,22 @@ public class OssServiceImpl implements OssService {
 
             // 获取文件名称
             String fileName = file.getOriginalFilename();
-
             // 调用OSS方式实现上传
             // 第一个参数，bucket名称
             // 第二个参数，上传到OSS文件路径和文件名称 aa/bb/1.jpg
             // 第三个参数，上传文件输入流
-            ossClient.putObject(bucketName, "<yourObjectName>", inputStream);
+            ossClient.putObject(bucketName, fileName, inputStream);
             // 关闭OSSClient。
             ossClient.shutdown();
 
             // 把上传之后文件路径返回
             // 需要把上传到阿里云oss路径手动拼接出来
-            String url = "";
+            //https://online-edu-cjx.oss-cn-beijing.aliyuncs.com/20200627120616.jpg
+            String url = "https://" + bucketName + "." + endpoint + "/" + fileName;
             return url;
         } catch (IOException e) {
             e.printStackTrace();
         }
-
 
         return null;
     }
