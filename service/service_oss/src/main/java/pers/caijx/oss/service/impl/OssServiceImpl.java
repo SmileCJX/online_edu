@@ -2,6 +2,7 @@ package pers.caijx.oss.service.impl;
 
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
+import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import pers.caijx.oss.service.OssService;
@@ -9,6 +10,7 @@ import pers.caijx.oss.utils.ConstantPropertiesUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.UUID;
 
 /**
  * @ClassName OssServiceImpl
@@ -37,6 +39,17 @@ public class OssServiceImpl implements OssService {
 
             // 获取文件名称
             String fileName = file.getOriginalFilename();
+
+            // 1.在文件名称前面添加随机唯一的值
+            String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+            fileName = uuid + fileName;
+
+            // 2 把文件按照日期进行分类
+            // 2020/07/03/1.jpg
+            // 获取当前日期
+            String datePath = new DateTime().toString("yyyy/MM/dd");
+            fileName = datePath + "/" + fileName;
+
             // 调用OSS方式实现上传
             // 第一个参数，bucket名称
             // 第二个参数，上传到OSS文件路径和文件名称 aa/bb/1.jpg
