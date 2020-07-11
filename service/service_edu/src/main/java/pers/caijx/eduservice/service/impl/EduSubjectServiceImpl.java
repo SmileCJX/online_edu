@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import pers.caijx.eduservice.entity.EduSubject;
 import pers.caijx.eduservice.entity.excel.SubjectData;
 import pers.caijx.eduservice.entity.subject.OneSubject;
+import pers.caijx.eduservice.entity.subject.TwoSubject;
 import pers.caijx.eduservice.listener.SubjectExcelListener;
 import pers.caijx.eduservice.mapper.EduSubjectMapper;
 import pers.caijx.eduservice.service.EduSubjectService;
@@ -52,7 +53,7 @@ public class EduSubjectServiceImpl extends ServiceImpl<EduSubjectMapper, EduSubj
         // 查询所有二级分类
         QueryWrapper<EduSubject> wrapperTwo = new QueryWrapper<>();
         wrapperTwo.ne("parent_id","0" );
-        List<EduSubject> twoSubjectList = baseMapper.selectList(wrapperOne);
+        List<EduSubject> twoSubjectList = baseMapper.selectList(wrapperTwo);
         
         //创建list集合，用于存储最终封装数据
         List<OneSubject> finalSubjectList = new ArrayList<>();
@@ -68,8 +69,25 @@ public class EduSubjectServiceImpl extends ServiceImpl<EduSubjectMapper, EduSubj
             BeanUtils.copyProperties(eduSubject, oneSubject);
             // 把多个OneSubject对象放到finalSubject里面
             finalSubjectList.add(oneSubject);
+
+            // 在一级分类底下循环遍历查询所有的二级分类
+            // 创建list集合封装每个一级分类的二级分类
+            List<TwoSubject> twoFinalSubject = new ArrayList<>();
+            // 遍历二级list集合
+            for (int m = 0; m < twoSubjectList.size(); m++) {
+                // 获取每个二级分类
+                EduSubject tSubject = twoSubjectList.get(m);
+                // 判断二级分类parentId是否和一级分类id一样
+                if (tSubject.getParentId().equals(eduSubject.getId())) {
+                    // 把tSubject值复制到twoSubject里面，放到twoFinalSubject里面
+                     TwoSubject twoSubject = new TwoSubject();
+                     BeanUtils.copyProperties(tSubject, twoSubject);
+                    twoFinalSubject.add(twoSubject);
+                }
+            }
+            // 把一级分类下面所有的二级分类放到一级分类底下
+            oneSubject.setChildren(twoFinalSubject);
         }
-        // 4 封装二级分类
         return finalSubjectList;
     }
 }
