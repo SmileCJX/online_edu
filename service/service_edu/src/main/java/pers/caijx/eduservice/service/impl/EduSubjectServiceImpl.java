@@ -3,6 +3,7 @@ package pers.caijx.eduservice.service.impl;
 import com.alibaba.excel.EasyExcel;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.val;
+import org.springframework.beans.BeanUtils;
 import org.springframework.web.multipart.MultipartFile;
 import pers.caijx.eduservice.entity.EduSubject;
 import pers.caijx.eduservice.entity.excel.SubjectData;
@@ -46,20 +47,29 @@ public class EduSubjectServiceImpl extends ServiceImpl<EduSubjectMapper, EduSubj
         // 查询所有一级分类
         QueryWrapper<EduSubject> wrapperOne = new QueryWrapper();
         wrapperOne.eq("parent_id", "0");
-        List<EduSubject> list = baseMapper.selectList(wrapperOne);
+        List<EduSubject> oneSubjectlist = baseMapper.selectList(wrapperOne);
 
         // 查询所有二级分类
         QueryWrapper<EduSubject> wrapperTwo = new QueryWrapper<>();
         wrapperTwo.ne("parent_id","0" );
-
+        List<EduSubject> twoSubjectList = baseMapper.selectList(wrapperOne);
+        
         //创建list集合，用于存储最终封装数据
         List<OneSubject> finalSubjectList = new ArrayList<>();
 
         // 3 封装一级分类
         // 查询出来所有的一级分类list集合遍历，得到每个一级分类对象，获取每一个一级分类对象值
         // 封装到要求的list集合里面 List<OneSubject> finalSubjectList
-
+        for (int i = 0; i < oneSubjectlist.size(); i++) {
+            // 得到oneSubjectList中每个Edusubject对象
+            EduSubject eduSubject = oneSubjectlist.get(i);
+            // 把eduSubject里面的值获取出来，放到OneSubject里面
+            OneSubject oneSubject = new OneSubject();
+            BeanUtils.copyProperties(eduSubject, oneSubject);
+            // 把多个OneSubject对象放到finalSubject里面
+            finalSubjectList.add(oneSubject);
+        }
         // 4 封装二级分类
-        return null;
+        return finalSubjectList;
     }
 }
