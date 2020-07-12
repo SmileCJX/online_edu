@@ -38,9 +38,13 @@ public class EduCourseServiceImpl extends ServiceImpl<EduCourseMapper, EduCourse
             throw new BusinessException(20001,"添加课程信息失败");
         }
 
+        // 获取添加之后课程id
+        String cid = eduCourse.getId();
+
         // 2 向课程简介表中添加课程简介
         EduCourseDescription eduCourseDescription = new EduCourseDescription();
         eduCourseDescription.setDescription(courseInfoVo.getDescription());
+        eduCourseDescription.setId(cid);
         courseDescriptionService.save(eduCourseDescription);
     }
 }
