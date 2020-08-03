@@ -2,6 +2,9 @@ package pers.caijx.eduservice.service;
 
 import pers.caijx.eduservice.entity.EduChapter;
 import com.baomidou.mybatisplus.extension.service.IService;
+import pers.caijx.eduservice.entity.chapter.ChapterVo;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface EduChapterService extends IService<EduChapter> {
 
+    /**
+     * 课程大纲列表，根据课程ID进行查询
+     * @param courseId
+     * @return
+     */
+    List<ChapterVo> getChapterVideoByCourseId(String courseId);
 }
