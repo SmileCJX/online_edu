@@ -19,7 +19,7 @@ import java.util.List;
  * @since 2020-07-12
  */
 @RestController
-@RequestMapping("/eduservice/edu-chapter")
+@RequestMapping("/eduservice/educhapter")
 @CrossOrigin
 public class EduChapterController {
 
