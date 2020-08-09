@@ -2,11 +2,8 @@ package pers.caijx.eduservice.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RestController;
 import pers.caijx.commonutils.R;
 import pers.caijx.eduservice.entity.chapter.ChapterVo;
 import pers.caijx.eduservice.service.EduChapterService;
@@ -23,6 +20,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/eduservice/edu-chapter")
+@CrossOrigin
 public class EduChapterController {
 
     @Autowired
