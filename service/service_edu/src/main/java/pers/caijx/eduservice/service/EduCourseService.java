@@ -19,4 +19,8 @@ public interface EduCourseService extends IService<EduCourse> {
      * @param courseInfoVo
      */
     String addCourseInfo(CourseInfoVo courseInfoVo);
+
+    CourseInfoVo getCourseInfo(String courseId);
+
+    void updateCourseInfo(CourseInfoVo courseInfoVo);
 }
