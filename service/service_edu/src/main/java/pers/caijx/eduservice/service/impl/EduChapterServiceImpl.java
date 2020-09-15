@@ -12,6 +12,7 @@ import pers.caijx.eduservice.service.EduChapterService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import pers.caijx.eduservice.service.EduVideoService;
+import pers.caijx.servicebase.exceptionhandler.BusinessException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,5 +78,22 @@ public class EduChapterServiceImpl extends ServiceImpl<EduChapterMapper, EduChap
         }
 
         return finalList;
+    }
+
+    @Override
+    public Boolean deleteChapter(String chapterId) {
+        // 根据chapterid章节id查询小节表，如果查询到数据，不进行删除
+        QueryWrapper<EduVideo> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("chapter_id", chapterId);
+        int count = eduVideoService.count(queryWrapper);
+        // 判断
+        if (count > 0) { // 查询出小节，不进行删除
+            throw new BusinessException(20001,"不能删除");
+        } else { // 不能查询数据，进行删除
+            // 删除章节
+            int result = baseMapper.deleteById(chapterId);
+            // 成功 1 > 0 0 > 0
+            return result > 0;
+        }
     }
 }
